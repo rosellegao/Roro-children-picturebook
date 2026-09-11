@@ -1,0 +1,8 @@
+interface:
+  display_name: "Children's Picturebook Studio"
+  short_description: "Story, art, narration, and delivery for a child's picturebook"
+  brand_color: "#EC745F"
+  default_prompt: "Use $children-picturebook-production to help me create a personalized picturebook for a child, starting with the child and story preferences."
+policy:
+  allow_implicit_invocation: true
+
