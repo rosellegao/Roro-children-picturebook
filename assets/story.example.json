@@ -1,0 +1,63 @@
+{
+  "book": {
+    "series": "Sam's First Adventures",
+    "title": "Sam's New Story",
+    "subtitle": "A warm story about trying, friendship, and an unexpected discovery.",
+    "language": "en",
+    "output_basename": "sam-new-story"
+  },
+  "ui": {
+    "bookLabel": "Picture book",
+    "start": "🔊 Play and start the story",
+    "navigation": "Picture book navigation",
+    "previous": "Previous page",
+    "toggle": "Play or pause",
+    "replay": "Replay this page",
+    "next": "Next page",
+    "continueAudio": "Tap play to continue listening to this page.",
+    "cover": "Cover",
+    "audioError": "This page’s audio could not load. Please try again."
+  },
+  "speakers": {
+    "Narrator": { "color": "#EC745F" },
+    "Sam": { "color": "#E96E86" },
+    "Friend": { "color": "#D89B32" }
+  },
+  "pages": [
+    {
+      "chapter": "Sam's First Adventures",
+      "title": "Sam's New Story",
+      "cover": true,
+      "image": "assets/pages/page-01.png",
+      "audio": "audio/pages/page-01.mp3",
+      "alt": "Sam walks toward preschool carrying a favorite toy",
+      "lines": [
+        { "text": "A warm story about trying, friendship, and an unexpected discovery.", "spoken": false }
+      ]
+    },
+    {
+      "chapter": "Act One",
+      "title": "What will happen today?",
+      "image": "assets/pages/page-02.png",
+      "audio": "audio/pages/page-02.mp3",
+      "alt": "Sam meets a new friend at preschool",
+      "lines": [
+        { "speaker": "Narrator", "text": "That morning, Sam arrived at preschool with a little plan." },
+        { "speaker": "Sam", "text": "I'm ready!" },
+        { "speaker": "Friend", "text": "Can we play together?" }
+      ]
+    },
+    {
+      "chapter": "Final Act",
+      "title": "An Unexpected Gift",
+      "image": "assets/pages/page-03.png",
+      "audio": "audio/pages/page-03.mp3",
+      "alt": "Sam and friends complete something new together",
+      "lines": [
+        { "speaker": "Sam", "text": "It wasn't what I planned, but I like this too!" },
+        { "text": "The first plan did not work, but it led to a new idea.", "emphasis": true }
+      ]
+    }
+  ]
+}
+
