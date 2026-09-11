@@ -1,4 +1,4 @@
-# Children's Picturebook Studio / 儿童互动绘本制作
+# Roro-children-picturebook / 儿童互动绘本制作
 
 A Codex Skill for turning a child's interests, personality, and everyday world into a personalized illustrated storybook.
 
@@ -87,17 +87,17 @@ The Skill follows the user's language unless another language is requested for t
 Install this repository as a Codex Skill, or clone/copy it into:
 
 ```text
-<CODEX_HOME>/skills/children-picturebook-production
+<CODEX_HOME>/skills/roro-children-picturebook
 ```
 
 Then start with either:
 
 ```text
-使用 $children-picturebook-production，帮我给孩子做一本专属绘本。
+使用 $roro-children-picturebook，帮我给孩子做一本专属绘本。
 ```
 
 ```text
-Use $children-picturebook-production to help me create a personalized picturebook for my child.
+Use $roro-children-picturebook to help me create a personalized picturebook for my child.
 ```
 
 ## Optional production dependencies
