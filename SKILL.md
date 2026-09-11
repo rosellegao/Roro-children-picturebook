@@ -1,5 +1,5 @@
 ---
-name: children-picturebook-production
+name: roro-children-picturebook
 description: Create or revise illustrated picturebooks for young children when the work includes story development, character and style alignment, page narration, responsive standalone HTML, and optional PDF or MP4 delivery. Use for a new book or a substantial book revision, not for a single isolated illustration or a prose-only story.
 ---
 
