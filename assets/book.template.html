@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>__DOCUMENT_TITLE__</title>
+  <style>
+    :root {
+      --ink: #49362f;
+      --cream: #fffaf0;
+      --coral: #ec745f;
+      --sky: #5ca8d4;
+      --sun: #f4b640;
+      --leaf: #68a56e;
+      font-family: "Noto Sans", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; min-height: 100%; margin: 0; }
+    body {
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 14%, rgb(255 229 154 / 55%), transparent 28%),
+        radial-gradient(circle at 88% 86%, rgb(91 170 212 / 30%), transparent 30%),
+        linear-gradient(135deg, #f8d887, #f0b466);
+      overflow: hidden;
+    }
+    button { color: inherit; font: inherit; }
+    .reader {
+      width: 100%; height: 100dvh; padding: clamp(12px, 2vw, 28px);
+      display: grid; place-items: center;
+    }
+    .book {
+      position: relative;
+      width: min(1440px, 100%);
+      height: min(840px, calc(100dvh - 24px));
+      min-height: 560px;
+      display: grid;
+      grid-template-columns: minmax(0, 59fr) minmax(360px, 41fr);
+      overflow: hidden;
+      border: 10px solid #fff0bd;
+      border-radius: 32px;
+      background: var(--cream);
+      box-shadow: 0 28px 78px rgb(76 43 20 / 30%);
+    }
+    .picture { position: relative; min-width: 0; overflow: hidden; background: #d8ecdf; }
+    .picture img { width: 100%; height: 100%; display: block; object-fit: cover; }
+    .page-mark {
+      position: absolute; left: 16px; bottom: 14px;
+      min-width: 30px; padding: 4px 8px; border-radius: 999px;
+      color: #6e5c4e; background: rgb(255 255 255 / 80%);
+      font-size: 12px; font-weight: 800; text-align: center;
+    }
+    .story {
+      min-width: 0; min-height: 0; overflow: auto;
+      padding: clamp(28px, 4.1vw, 64px) clamp(24px, 3.6vw, 56px) 94px;
+      background:
+        radial-gradient(circle at 88% 12%, rgb(244 182 64 / 20%) 0 6%, transparent 7%),
+        var(--cream);
+      scrollbar-width: thin;
+    }
+    .chapter {
+      display: inline-block; margin: 0 0 13px; padding: 6px 13px;
+      border-radius: 999px; color: white; background: var(--coral);
+      font-size: clamp(12px, 1vw, 15px); font-weight: 900;
+    }
+    h1 {
+      margin: 0; color: #49352e;
+      font-family: "YouYuan", "STKaiti", "KaiTi", "Noto Serif SC", serif;
+      font-size: clamp(32px, 3.2vw, 54px); line-height: 1.13; letter-spacing: .035em;
+    }
+    .spark { margin: 18px 0 16px; color: var(--coral); font-size: 22px; }
+    .lines { display: grid; gap: 13px; }
+    .line { margin: 0; font-size: clamp(17px, 1.45vw, 23px); line-height: 1.55; }
+    .speaker {
+      display: inline-block; margin-right: .55em; padding: .14em .58em;
+      border-radius: 999px; color: white; background: var(--speaker, var(--coral));
+      font-size: .8em; font-weight: 900; vertical-align: .1em;
+    }
+    .moral {
+      padding: .72em .88em; border: 2px solid rgb(218 166 54 / 45%); border-radius: 14px;
+      background: #fff0c7; box-shadow: 0 5px 12px rgb(137 99 34 / 8%); font-weight: 900;
+    }
+    .controls {
+      position: absolute; right: clamp(18px, 3vw, 42px); bottom: 20px; z-index: 4;
+      display: flex; align-items: center; gap: 9px;
+      padding: 7px; border-radius: 999px; background: rgb(255 251 239 / 90%);
+      box-shadow: 0 8px 24px rgb(91 57 29 / 16%); backdrop-filter: blur(8px);
+    }
+    .control, .start {
+      min-width: 46px; min-height: 46px; border: 0; border-radius: 999px;
+      background: #fff; box-shadow: inset 0 0 0 1px rgb(73 54 47 / 10%);
+      cursor: pointer; font-size: 22px; font-weight: 900;
+    }
+    .control:disabled { opacity: .3; cursor: default; }
+    .count { min-width: 58px; font-weight: 900; text-align: center; }
+    .start {
+      position: absolute; right: clamp(24px, 4vw, 58px); bottom: 92px; z-index: 5;
+      width: auto; padding: 0 22px; color: white;
+      background: linear-gradient(135deg, #ef7b63, #dc5c47);
+      box-shadow: 0 10px 24px rgb(159 71 51 / 28%);
+      font-size: 16px;
+    }
+    .notice {
+      position: absolute; right: 36px; bottom: 84px; z-index: 5;
+      max-width: 360px; margin: 0; padding: 8px 13px; border-radius: 10px;
+      color: #9a4a3f; background: #fff5db; font-size: 13px;
+    }
+    .book.cover .story { padding-top: clamp(42px, 6vh, 72px); }
+    .book.cover h1 { font-size: clamp(52px, 5.4vw, 88px); line-height: 1.01; color: #d65f4c; }
+    .book.cover .line { color: #735145; font-size: clamp(18px, 1.5vw, 24px); font-weight: 750; }
+
+    @media (max-width: 820px) and (orientation: portrait) {
+      body { overflow: auto; }
+      .reader { min-height: 100dvh; height: auto; padding: 0; display: block; }
+      .book {
+        width: 100%; height: 100dvh; min-height: 640px;
+        grid-template-columns: 1fr; grid-template-rows: 43% 57%;
+        border: 0; border-radius: 0; box-shadow: none;
+      }
+      .story { padding: 18px 18px 84px; }
+      .chapter { margin-bottom: 8px; font-size: 12px; }
+      h1 { font-size: clamp(28px, 8vw, 40px); }
+      .spark { margin: 10px 0; }
+      .lines { gap: 9px; }
+      .line { font-size: clamp(16px, 4.3vw, 20px); line-height: 1.48; }
+      .controls { left: 50%; right: auto; bottom: max(10px, env(safe-area-inset-bottom)); transform: translateX(-50%); }
+      .start { left: 50%; right: auto; bottom: 78px; transform: translateX(-50%); white-space: nowrap; }
+      .book.cover .story { padding-top: 17px; }
+      .book.cover h1 { font-size: clamp(38px, 11vw, 58px); }
+    }
+
+    @media (max-height: 620px) and (orientation: landscape) {
+      .reader { padding: 0; }
+      .book {
+        width: 100vw; height: 100dvh; min-height: 0;
+        grid-template-columns: minmax(0, 58fr) minmax(330px, 42fr);
+        border: 0; border-radius: 0; box-shadow: none;
+      }
+      .story { padding: clamp(18px, 4vh, 28px) 22px 72px; }
+      .chapter { margin-bottom: 8px; padding: 4px 10px; font-size: 11px; }
+      h1 { font-size: clamp(27px, 6.4vh, 38px); }
+      .spark { margin: 9px 0; font-size: 16px; }
+      .lines { gap: 7px; }
+      .line { font-size: clamp(16px, 3.8vh, 21px); line-height: 1.42; }
+      .controls { right: 16px; bottom: 8px; padding: 5px; }
+      .control { min-width: 40px; min-height: 40px; font-size: 19px; }
+      .start { right: 20px; bottom: 60px; min-height: 42px; }
+      .book.cover h1 { font-size: clamp(44px, 12vh, 72px); }
+    }
+
+    body.export .reader { width: 1920px; height: 1080px; padding: 0; }
+    body.export .book {
+      width: 1920px; height: 1080px; min-height: 0;
+      grid-template-columns: 59fr 41fr; border: 0; border-radius: 0; box-shadow: none;
+    }
+    body.export .story { padding: 66px 64px; overflow: hidden; }
+    body.export .chapter { font-size: 18px; }
+    body.export h1 { font-size: 56px; }
+    body.export .spark { margin: 21px 0 18px; }
+    body.export .lines { gap: 15px; }
+    body.export .line { font-size: 27px; line-height: 1.43; }
+    body.export .book.cover h1 { font-size: 84px; }
+    body.export .controls, body.export .start, body.export .notice { display: none !important; }
+  </style>
+</head>
+<body>
+  <main class="reader">
+    <section class="book" id="book" aria-label="Picture book">
+      <div class="picture">
+        <img id="picture" alt="">
+        <span class="page-mark" id="page-mark"></span>
+      </div>
+      <article class="story" id="story" aria-live="polite">
+        <p class="chapter" id="chapter"></p>
+        <h1 id="page-title"></h1>
+        <div class="spark" aria-hidden="true">✦</div>
+        <div class="lines" id="lines"></div>
+      </article>
+      <button class="start" id="start" type="button">🔊 Play and start the story</button>
+      <p class="notice" id="notice" hidden></p>
+      <nav class="controls" id="controls" aria-label="Picture book navigation">
+        <button class="control" id="previous" type="button" aria-label="Previous page">‹</button>
+        <span class="count" id="count"></span>
+        <button class="control" id="toggle" type="button" aria-label="Play or pause">▶</button>
+        <button class="control" id="replay" type="button" aria-label="Replay this page">↻</button>
+        <button class="control" id="next" type="button" aria-label="Next page">›</button>
+      </nav>
+    </section>
+  </main>
+  <audio id="audio" preload="metadata"></audio>
+  <script id="book-data" type="application/json">__BOOK_DATA_JSON__</script>
+  <script>
+    (() => {
+      const data = JSON.parse(document.getElementById('book-data').textContent);
+      const query = new URLSearchParams(location.search);
+      const exportMode = query.get('export') === '1';
+      let pageIndex = Math.max(0, Math.min(data.pages.length - 1, Number(query.get('page')) || 0));
+      let storyStarted = false;
+      let touchStart = null;
+      const $ = id => document.getElementById(id);
+      const audio = $('audio');
+      const book = $('book');
+      const language = data.book.language || 'en';
+      const englishUi = {
+        bookLabel: 'Picture book',
+        start: '🔊 Play and start the story',
+        navigation: 'Picture book navigation',
+        previous: 'Previous page',
+        toggle: 'Play or pause',
+        replay: 'Replay this page',
+        next: 'Next page',
+        continueAudio: 'Tap play to continue listening to this page.',
+        cover: 'Cover',
+        audioError: 'This page’s audio could not load. Please try again.'
+      };
+      const chineseUi = {
+        bookLabel: '绘本',
+        start: '🔊 播放并开始讲故事',
+        navigation: '绘本翻页',
+        previous: '上一页',
+        toggle: '播放或暂停',
+        replay: '重听本页',
+        next: '下一页',
+        continueAudio: '点一下播放按钮，就可以继续听这一页。',
+        cover: '封面',
+        audioError: '这一页的声音没有加载成功，请再试一次。'
+      };
+      const ui = {
+        ...(language.toLowerCase().startsWith('zh') ? chineseUi : englishUi),
+        ...(data.ui || {})
+      };
+      if (exportMode) document.body.classList.add('export');
+      document.documentElement.lang = language;
+      book.setAttribute('aria-label', `${data.book.title} — ${ui.bookLabel}`);
+      $('start').textContent = ui.start;
+      $('controls').setAttribute('aria-label', ui.navigation);
+      $('previous').setAttribute('aria-label', ui.previous);
+      $('toggle').setAttribute('aria-label', ui.toggle);
+      $('replay').setAttribute('aria-label', ui.replay);
+      $('next').setAttribute('aria-label', ui.next);
+
+      function setNotice(message) {
+        $('notice').textContent = message || '';
+        $('notice').hidden = !message;
+      }
+
+      function playCurrent(restart = false) {
+        if (!audio.src) return;
+        if (restart) audio.currentTime = 0;
+        audio.play().catch(() => setNotice(ui.continueAudio));
+      }
+
+      function render(autoplay = true) {
+        const page = data.pages[pageIndex];
+        book.classList.toggle('cover', Boolean(page.cover));
+        $('picture').src = page.image_data;
+        $('picture').alt = page.alt || '';
+        $('page-mark').textContent = page.cover ? ui.cover : String(pageIndex).padStart(2, '0');
+        $('chapter').textContent = page.chapter || '';
+        $('page-title').textContent = page.title || '';
+        $('lines').replaceChildren(...page.lines.map(line => {
+          const p = document.createElement('p');
+          p.className = `line${line.emphasis ? ' moral' : ''}`;
+          if (line.speaker) {
+            const chip = document.createElement('span');
+            chip.className = 'speaker';
+            chip.textContent = line.speaker;
+            chip.style.setProperty('--speaker', data.speakers?.[line.speaker]?.color || '#EC745F');
+            p.append(chip, document.createTextNode(line.text));
+          } else {
+            p.textContent = line.text;
+          }
+          return p;
+        }));
+        $('story').scrollTop = 0;
+        $('count').textContent = `${pageIndex + 1} / ${data.pages.length}`;
+        $('previous').disabled = pageIndex === 0;
+        $('next').disabled = pageIndex === data.pages.length - 1;
+        $('start').hidden = exportMode || storyStarted || !page.cover;
+        $('toggle').hidden = exportMode || !storyStarted;
+        $('replay').hidden = exportMode || !storyStarted;
+        setNotice('');
+        audio.pause();
+        audio.removeAttribute('src');
+        if (page.audio_data) audio.src = page.audio_data;
+        audio.load();
+        if (autoplay && storyStarted && page.audio_data) setTimeout(() => playCurrent(true), 80);
+        window.bookReady = true;
+        window.currentBookPage = pageIndex;
+      }
+
+      function go(delta) {
+        const target = pageIndex + delta;
+        if (target < 0 || target >= data.pages.length) return;
+        pageIndex = target;
+        render(true);
+      }
+
+      $('start').addEventListener('click', () => {
+        storyStarted = true;
+        render(false);
+        playCurrent(true);
+      });
+      $('previous').addEventListener('click', () => go(-1));
+      $('next').addEventListener('click', () => go(1));
+      $('toggle').addEventListener('click', () => audio.paused ? playCurrent(false) : audio.pause());
+      $('replay').addEventListener('click', () => playCurrent(true));
+      audio.addEventListener('play', () => { $('toggle').textContent = 'Ⅱ'; setNotice(''); });
+      audio.addEventListener('pause', () => { $('toggle').textContent = '▶'; });
+      audio.addEventListener('error', () => setNotice(ui.audioError));
+      addEventListener('keydown', event => {
+        if (event.key === 'ArrowRight' || event.key === 'PageDown') go(1);
+        if (event.key === 'ArrowLeft' || event.key === 'PageUp') go(-1);
+      });
+      book.addEventListener('touchstart', event => { touchStart = event.touches[0]?.clientX ?? null; }, {passive: true});
+      book.addEventListener('touchend', event => {
+        if (touchStart === null) return;
+        const delta = event.changedTouches[0].clientX - touchStart;
+        if (Math.abs(delta) > 55) go(delta < 0 ? 1 : -1);
+        touchStart = null;
+      }, {passive: true});
+      render(false);
+    })();
+  </script>
+</body>
+</html>
+
